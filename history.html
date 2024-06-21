@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>对话框页面</title>
+    <style>
+        /* 设置全局样式和背景图片 */
+        body {
+            background-image: url('https://s2.loli.net/2024/06/07/Fiv89C6sX7LAJo2.png');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 设置对话框样式 */
+        .dialog-box {
+            background-color: rgba(128, 128, 128, 0.7); /* 灰色透明背景 */
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            width: 60%;
+            max-width: 800px;
+            text-align: left; /* 文本左对齐 */
+            color: #fff;
+            position: relative;
+            font-size: 18px;
+            line-height: 1.5;
+            font-weight: bold; /* 字体加粗 */
+            text-indent: 2ch; /* 首行缩进2字符 */
+        }
+
+        .dialog-box::before,
+        .dialog-box::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border: 10px solid rgba(128, 128, 128, 0.7);
+            border-radius: 50%;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(128, 128, 128, 0.7);
+        }
+
+        .dialog-box::after {
+            top: auto;
+            bottom: -30px;
+        }
+
+        /* 设置下一页按钮样式 */
+        .next-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 18px;
+            margin-top: 20px; /* 调整按钮与对话框之间的距离 */
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%); /* 居中按钮 */
+        }
+
+        .next-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dialog-box" id="dialog-box">
+        <!-- 对话框内容将通过JavaScript填充 -->
+    </div>
+    <button class="next-button" id="next-button" disabled>继续探索</button>
+
+    <script>
+        // 对话内容数组
+        const dialogContent = [
+            "你好啊，新同事！我的名字是扬子江药业集团南京海陵药业有限公司，大家喜欢直接叫我海陵。我诞生于2001年，我的母亲是扬子江药业集团，她目前已53岁，现处泰州。我还有其他的弟兄姐妹分布在北京、上海、广州、成都、苏州、常州等地。",
+            "扬子江药业集团南京海陵药业有限公司是由国家重点企业扬子江药业集团于2001年投资兴建，公司牢记“求索进取、护佑众生“的企业使命，不断开拓创新、已发展为一家集科研、生产、营销于一体的国家高新技术企业。",
+            "先后获批国家工程研究中心，江苏省院士工作站，建立较完善的研发体系，拥有检测、合成、制剂等各类仪器装备500余台，掌握药物合成、药物分析、药物制剂等多项关键技术，处于国内领先水平。",
+            "拥有片剂、胶囊剂、颗粒剂、小容量注射剂、大容量注射剂5种剂型，在产共计34个品规，8个品种进入全国集采。",
+            "公司先后荣获“南京市市长质量奖”、“南京市优秀企业”、“江苏省质量管理优秀奖”、“南京市总部企”和省级专精特新小巨人企业等荣誉称号。",
+            "2016-2020年，连续五年入选中国化学制药行业工业百强榜。2022年获批“江苏省绿色工厂”、“守法诚信企业”与“中国医药商业百强第80强”。2023年获批“国家绿色工厂”、江苏省“互联网标杆工厂”、江苏省医药行业质量管理优秀企业。",
+            "祝你学习愉快。",
+            "谢谢你的参与！"
+        ];
+
+        let currentPage = 0;
+
+        // 获取对话框和按钮元素
+        const dialogBox = document.getElementById('dialog-box');
+        const nextButton = document.getElementById('next-button');
+
+        // 更新对话框内容函数
+        function updateDialog() {
+            const content = dialogContent[currentPage];
+            let index = 0;
+
+            dialogBox.textContent = '';
+            nextButton.disabled = true;
+
+            function typeWriter() {
+                if (index < content.length) {
+                    dialogBox.innerHTML += content.charAt(index);
+                    index++;
+                    setTimeout(typeWriter, 50);
+                } else {
+                    nextButton.disabled = false; // 打字效果完成后启用按钮
+                }
+            }
+
+            typeWriter();
+
+            if (currentPage === dialogContent.length - 1) {
+                nextButton.textContent = '完成';
+            }
+        }
+
+        // 下一页按钮点击事件
+        nextButton.addEventListener('click', () => {
+            if (currentPage < dialogContent.length - 1) {
+                currentPage++;
+                updateDialog();
+            }
+        });
+
+        // 初始化对话框内容
+        updateDialog();
+    </script>
+</body>
+
+</html>

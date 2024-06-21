@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人物对话</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            margin: 0;
+            background-image: url('https://s2.loli.net/2024/06/07/Fiv89C6sX7LAJo2.png');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #setup-box, #dialogue-box {
+            width: 90%;
+            max-width: 600px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        .character {
+            text-align: center;
+        }
+        .character img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+        #text {
+            margin-top: 10px;
+            font-size: 18px;
+            padding: 15px;
+            background-color: #ffffff;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        #next-btn, #start-btn, #retry-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #next-btn:disabled, #start-btn:disabled, #retry-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        #setup-box input, #setup-box select {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .dialogue {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .dialogue .character {
+            margin: 0 10px;
+        }
+        .dialogue-left {
+            justify-content: flex-start;
+        }
+        .dialogue-right {
+            justify-content: flex-end;
+        }
+        .dialogue-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 2px solid #007bff;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #choice-container {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="setup-box">
+        <h2>设置您的信息</h2>
+        <input type="text" id="nickname" placeholder="昵称" required>
+        <select id="gender" required>
+            <option value="">选择性别</option>
+            <option value="male">男</option>
+            <option value="female">女</option>
+        </select>
+        <input type="text" id="employeeId" placeholder="员工号" required>
+        <button id="start-btn" onclick="startDialogue()">开始探索</button>
+    </div>
+
+    <div id="dialogue-box" style="display:none;">
+        <div class="dialogue dialogue-left" id="dialogueA">
+            <div class="character" id="characterA">
+                <img id="characterA-img" src="https://via.placeholder.com/100" alt="Character A">
+            </div>
+            <div id="textA" class="dialogue-container"></div>
+        </div>
+        <div class="dialogue dialogue-right" id="dialogueB">
+            <div id="textB" class="dialogue-container"></div>
+            <div class="character" id="characterB">
+                <img src="https://s2.loli.net/2024/06/07/jibF7VBChPaymK8.jpg" alt="Character B">
+            </div>
+        </div>
+        <button id="next-btn" onclick="nextDialogue()">下一句</button>
+        <div id="choice-container">
+            <p>你要重新学习一次吗？</p>
+            <button onclick="retryDialogue()">是</button>
+            <button onclick="endDialogue()">否</button>
+        </div>
+    </div>
+
+    <script>
+        const dialogues = [
+            { character: 'A', text: '终于入职了南京海陵药业，真是期待在今后的工作呢！' },
+            { character: 'B', text: '同学，你好啊，我是海陵人力资源部的信息福利专员夏艺纯。' },
+            { character: 'A', text: '夏老师你好！很高兴见到你，我这里正好有几个问题想咨询您。' },
+            { character: 'B', text: '当然可以，我很乐意帮助你。' },
+            { character: 'A', text: '首先，我想了解一下公司的福利待遇。' },
+            { character: 'B', text: '我们的福利待遇非常全面，包括五险一金、带薪年假、节日福利等。' },
+            { character: 'A', text: '听起来很不错。工作时间是怎样的呢？' },
+            { character: 'B', text: '我们的工作时间是标准的8小时工作制，周末双休。' },
+            { character: 'A', text: '好的。请问公司有培训机会吗？' },
+            { character: 'B', text: '有的，我们会定期组织专业培训，帮助员工提升技能。' },
+            { character: 'A', text: '太好了！最后一个问题，公司的晋升机制是怎样的？' },
+            { character: 'B', text: '公司有完善的晋升机制，只要你表现优秀，就有机会获得晋升。' },
+            { character: 'A', text: '谢谢您的解答，我对公司的了解更多了。' },
+            { character: 'B', text: '不客气，欢迎你加入我们！' },
+            { character: 'A', text: '谢谢！我会努力工作的。' },
+            { character: 'B', text: '加油！你一定会做得很好的。' },
+            { character: 'A', text: '好的，我会加油的！' },
+            { character: 'B', text: '对了，你还有其他问题吗？' },
+            { character: 'A', text: '暂时没有了，谢谢您。' },
+            { character: 'B', text: '那好，有问题随时可以找我，我的联系方式是：188XXXXXXX。' },
+            { character: 'A', text: '好的，谢谢，再见。' },
+            { character: 'B', text: '再见，祝你工作顺利！' },
+            { character: 'choice', text: '马上进入测试环节了，你要重新学习一次吗？' }
+        ];
+
+        let currentDialogue = 0;
+
+        function showDialogue(index) {
+            const dialogue = dialogues[index];
+            if (dialogue.character === 'A') {
+                document.getElementById('textA').innerText = dialogue.text;
+                document.getElementById('dialogueA').style.display = 'flex';
+                document.getElementById('dialogueB').style.display = 'none';
+            } else if (dialogue.character === 'B') {
+                document.getElementById('textB').innerText = dialogue.text;
+                document.getElementById('dialogueA').style.display = 'none';
+                document.getElementById('dialogueB').style.display = 'flex';
+            } else if (dialogue.character === 'choice') {
+                document.getElementById('dialogueA').style.display = 'none';
+                document.getElementById('dialogueB').style.display = 'none';
+                document.getElementById('choice-container').style.display = 'block';
+                document.getElementById('next-btn').style.display = 'none';
+            }
+        }
+
+        function nextDialogue() {
+            if (currentDialogue < dialogues.length - 1) {
+                currentDialogue++;
+                showDialogue(currentDialogue);
+            } else {
+                document.getElementById('next-btn').disabled = true;
+                document.getElementById('textA').innerText = '对话结束';
+                document.getElementById('dialogueA').style.display = 'flex';
+                document.getElementById('dialogueB').style.display = 'none';
+            }
+        }
+
+        function retryDialogue() {
+            currentDialogue = 0;
+            document.getElementById('choice-container').style.display = 'none';
+            document.getElementById('next-btn').style.display
+            = 'block';
+            document.getElementById('next-btn').disabled = false;
+            showDialogue(currentDialogue);
+        }
+
+        function endDialogue() {
+            document.getElementById('textA').innerText = '对话结束';
+            document.getElementById('dialogueA').style.display = 'flex';
+            document.getElementById('dialogueB').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('choice-container').style.display = 'none';
+        }
+
+        function startDialogue() {
+            const nickname = document.getElementById('nickname').value.trim();
+            const gender = document.getElementById('gender').value;
+            const employeeId = document.getElementById('employeeId').value.trim();
+
+            if (nickname && gender && employeeId) {
+                const characterAImg = document.getElementById('characterA-img');
+                if (gender === 'male') {
+                    characterAImg.src = 'https://s2.loli.net/2024/06/07/WTAmgG2EnPuL9pZ.jpg';
+                } else if (gender === 'female') {
+                    characterAImg.src = 'https://s2.loli.net/2024/06/07/jibF7VBChPaymK8.jpg';
+                }
+
+                document.getElementById('setup-box').style.display = 'none';
+                document.getElementById('dialogue-box').style.display = 'block';
+                showDialogue(currentDialogue);
+            } else {
+                alert('请填写所有字段');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>题目问答系统</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+
+        #welcome, #quiz, #result {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s;
+        }
+
+        #welcome {
+            background: url('https://s2.loli.net/2024/06/21/Exrf2nFX7L5Tc6J.png') no-repeat center center;
+            background-size: cover;
+        }
+
+        #quiz {
+            background: url('https://s2.loli.net/2024/06/07/Fiv89C6sX7LAJo2.png') no-repeat center center;
+            background-size: cover;
+            opacity: 0;
+        }
+
+        #result {
+            display: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .question {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .option {
+            margin: 5px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        #next-question, #submit-quiz {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="welcome"></div>
+    <div id="quiz" class="hidden">
+        <div class="question" id="question-container"></div>
+        <button id="next-question" class="hidden">下一题</button>
+        <button id="submit-quiz" class="hidden">提交答案</button>
+    </div>
+    <div id="result" class="hidden">
+        <div id="result-message"></div>
+        <button id="retry-quiz">重新开始</button>
+    </div>
+
+    <script>
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let questions = [];
+        const questionContainer = document.getElementById('question-container');
+        const nextQuestionButton = document.getElementById('next-question');
+        const submitQuizButton = document.getElementById('submit-quiz');
+        const resultContainer = document.getElementById('result');
+        const resultMessage = document.getElementById('result-message');
+        const retryQuizButton = document.getElementById('retry-quiz');
+
+        function showQuiz() {
+            document.getElementById('welcome').classList.add('hidden');
+            const quiz = document.getElementById('quiz');
+            quiz.classList.remove('hidden');
+            quiz.style.opacity = 1;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentQuestionIndex < questions.length) {
+                const question = questions[currentQuestionIndex];
+                questionContainer.innerHTML = `
+                    <h2>${question.text}</h2>
+                    <div class="options">
+                        ${question.options.map((option, index) => `
+                            <label class="option">
+                                <input type="${question.type}" name="option" value="${index}">
+                                ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                if (currentQuestionIndex === questions.length - 1) {
+                    nextQuestionButton.classList.add('hidden');
+                    submitQuizButton.classList.remove('hidden');
+                } else {
+                    nextQuestionButton.classList.remove('hidden');
+                    submitQuizButton.classList.add('hidden');
+                }
+            }
+        }
+
+        function nextQuestion() {
+            const selectedOption = document.querySelector('input[name="option"]:checked');
+            if (selectedOption) {
+                const answer = questions[currentQuestionIndex].answer;
+                if (parseInt(selectedOption.value) === answer) {
+                    score += 20;
+                }
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                alert('请选择一个选项');
+            }
+        }
+
+        function submitQuiz() {
+            const selectedOption = document.querySelector('input[name="option"]:checked');
+            if (selectedOption) {
+                const answer = questions[currentQuestionIndex].answer;
+                if (parseInt(selectedOption.value) === answer) {
+                    score += 20;
+                }
+                showResult();
+            } else {
+                alert('请选择一个选项');
+            }
+        }
+
+        function showResult() {
+            document.getElementById('quiz').classList.add('hidden');
+            resultContainer.classList.remove('hidden');
+            resultContainer.style.display = 'flex';
+            if (score >= 80) {
+                resultMessage.innerHTML = `恭喜通关！你的得分是 ${score} 分。`;
+            } else {
+                resultMessage.innerHTML = `未通过。你的得分是 ${score} 分。请重新开始。`;
+            }
+        }
+
+        function retryQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            resultContainer.classList.add('hidden');
+            resultContainer.style.display = 'none';
+            showQuiz();
+        }
+
+        function initializeQuiz() {
+            // 从Excel文件中加载问题（这里可以使用一些JavaScript库来读取Excel文件，如xlsx）
+            // 这里是假数据
+            questions = [
+                {
+                    text: '单选题：扬子江药业集团南京海陵药业有限公司成立于哪一年？',
+                    type: 'radio',
+                    options: ['1999年', '2001年', '2005年'],
+                    answer: 1
+                },
+                {
+                    text: '多选题：扬子江药业集团南京海陵药业有限公司位于哪些城市？',
+                    type: 'checkbox',
+                    options: ['北京', '南京', '上海', '广州'],
+                    answer: [1, 2]
+                },
+                {
+                    text: '判断题：扬子江药业集团南京海陵药业有限公司是一家国家高新技术企业。',
+                    type: 'radio',
+                    options: ['正确', '错误'],
+                    answer: 0
+                },
+                {
+                    text: '单选题：扬子江药业集团南京海陵药业有限公司的母公司是哪个？',
+                    type: 'radio',
+                    options: ['扬子江药业集团', '哈药集团', '中生制药'],
+                    answer: 0
+                },
+                {
+                    text: '判断题：扬子江药业集团南京海陵药业有限公司的总部位于广州。',
+                    type: 'radio',
+                    options: ['正确', '错误'],
+                    answer: 1
+                }
+            ];
+
+            // 随机抽取5道题
+            questions = questions.sort(() => 0.5 - Math.random()).slice(0, 5);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeQuiz();
+            setTimeout(showQuiz, 3000);
+            document.getElementById('welcome').addEventListener('click', showQuiz);
+            nextQuestionButton.addEventListener('click', nextQuestion);
+            submitQuizButton.addEventListener('click', submitQuiz);
+            retryQuizButton.addEventListener('click', retryQuiz);
+        });
+    </script>
+</body>
+
+</html>

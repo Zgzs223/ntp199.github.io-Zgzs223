@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>厂区地图</title>
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .title {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .map {
+            position: relative;
+            width: 100%;
+            height: 800px;
+            background-image: url('https://s2.loli.net/2024/06/21/pZuJlTCwasDGnEO.png'); /* 替换为实际的厂区地图图片URL */
+            background-size: cover;
+            background-position: center;
+            border: 2px solid #ccc;
+        }
+
+        .legend {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        .office-color {
+            background-color: rgba(96, 195, 228, 0.7);
+        }
+
+        .warehouse-color {
+            background-color: rgba(144, 238, 144, 0.7);
+        }
+
+        .production-color {
+            background-color: rgba(255, 182, 193, 0.7);
+        }
+
+        .parking-color {
+            background-color: rgba(16, 81, 201, 0.7);
+        }
+
+        .cafeteria-color {
+            background-color: rgba(212, 50, 199, 0.7);
+        }
+
+        .dormitory-color {
+            background-color: rgba(255, 223, 0, 0.7);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="title">厂区地图</div>
+        <div class="map">
+            <!-- 可以在这里添加标注位置的元素 -->
+        </div>
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color office-color"></div>
+                <div>办公区</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color warehouse-color"></div>
+                <div>仓库</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color production-color"></div>
+                <div>生产区</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color parking-color"></div>
+                <div>停车场</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color cafeteria-color"></div>
+                <div>食堂</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color dormitory-color"></div>
+                <div>宿舍</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

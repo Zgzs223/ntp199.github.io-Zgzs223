@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>南京海陵入职闯关</title>
+    <style>
+        /* 添加全局样式，设置背景图片 */
+        body {
+            background-image: url('https://s2.loli.net/2024/06/07/Fiv89C6sX7LAJo2.png'); /* 替换为占位符图片URL进行测试 */
+            background-repeat: no-repeat; /* 图片不平铺 */
+            background-position: center center; /* 图片居中 */
+            background-size: cover; /* 图片覆盖整个容器，可能会裁剪 */
+            min-height: 100vh; /* 确保背景至少覆盖视口高度 */
+            font-family: Arial, sans-serif; /* 设置字体以便更好的阅读体验 */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 设置标题样式 */
+        .title {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 36px;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.5); /* 半透明背景 */
+            padding: 20px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 阴影效果 */
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* 设置侧边栏容器样式 */
+        .sidebar {
+            margin-top: 140px; /* 距离顶部140px */
+        }
+
+        /* 把a转换为块级元素并加粗字体 */
+        a {
+            display: block;
+            width: 200px;
+            height: 40px;
+            background-color: #e48091;
+            font-size: 14px;
+            color: #fff;
+            text-decoration: none;
+            padding-left: 30px;
+            line-height: 40px;
+            font-weight: bold; /* 加粗字体 */
+            text-align: left; /* 左侧居中 */
+            margin-bottom: 10px; /* 链接之间的间距 */
+        }
+
+        /* 鼠标经过链接变换背景颜色 */
+        a:hover {
+            background-color: #d1763a;
+        }
+
+        /* 设置进度条容器样式 */
+        .progress-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 设置进度条样式 */
+        .progress-bar {
+            width: 0;
+            height: 20px;
+            background-color: #76c7c0;
+            border-radius: 10px;
+            text-align: center;
+            line-height: 20px;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="title">南京海陵新员工入职闯关游戏</div>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar">0%</div>
+    </div>
+
+    <div class="sidebar">
+        <a href="renli.html" class="task" data-completed="false">第一关：启航欢迎篇</a>
+        <a href="history.html" class="task" data-completed="false">第二关：公司简介篇</a>
+        <a href="wenhua.html" class="task" data-completed="false">第三关：质量文化篇</a>
+        <a href="zhidu.html" class="task" data-completed="false">第四关：政策法规篇</a>
+        <a href="shizhan.html" class="task" data-completed="false">第五关：实战演练篇</a>
+        <a href="https://yangzijiang.feishu.cn/docx/PCG1db9RGo9mUhxorgEcZ4VKn1f?from=from_copylink" class="task" data-completed="false">第六关：合理化建议</a>
+        <a href="jiagou.html" class="task" data-completed="false">第七关：组织架构图</a>
+        <a href="map.html" class="task" data-completed="false">第八关：全厂区地图</a> <!-- 新增第八关链接 -->
+    </div>
+
+    <script>
+        // 获取所有任务链接
+        const tasks = document.querySelectorAll('.task');
+
+        // 更新进度条
+        function updateProgressBar() {
+            const progressBar = document.getElementById('progress-bar');
+            const completedTasks = document.querySelectorAll('.task[data-completed="true"]').length;
+            const totalTasks = tasks.length;
+            const progressPercentage = (completedTasks / totalTasks) * 100;
+
+            progressBar.style.width = progressPercentage + '%';
+            progressBar.textContent = Math.round(progressPercentage) + '%';
+        }
+
+        // 模拟任务完成（点击链接切换完成状态）
+        tasks.forEach(task => {
+            task.addEventListener('click', function (event) {
+                if (this.getAttribute('href') === 'renli.html' || this.getAttribute('href') === 'map.html' || this.getAttribute('href') === 'zhidu.html' || this.getAttribute('href') === 'wenhua.html' || this.getAttribute('href') === 'shizhan.html' || this.getAttribute('href') === 'jiagou.html' || this.getAttribute('href') === 'https://yangzijiang.feishu.cn/docx/PCG1db9RGo9mUhxorgEcZ4VKn1f?from=from_copylink' || this.getAttribute('href') === 'history.html') {
+                    return; // 如果是第一关或第八关链接，直接跳转
+                }
+                event.preventDefault(); // 阻止默认链接行为
+                const isCompleted = this.getAttribute('data-completed') === 'true';
+                this.setAttribute('data-completed', !isCompleted);
+                this.style.backgroundColor = !isCompleted ? '#d1763a' : '#80bce4'; // 更改背景颜色
+                updateProgressBar(); // 更新进度条
+            });
+        });
+
+        // 初始更新进度条
+        updateProgressBar();
+    </script>
+</body>
+
+</html>

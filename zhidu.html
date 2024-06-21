@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>对话框页面</title>
+    <style>
+        /* 设置全局样式和背景图片 */
+        body {
+            background-image: url('https://s2.loli.net/2024/06/07/Fiv89C6sX7LAJo2.png');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 设置对话框样式 */
+        .dialog-box {
+            background-color: rgba(128, 128, 128, 0.7); /* 灰色透明背景 */
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            width: 60%;
+            max-width: 800px;
+            text-align: center;
+            color: #fff;
+            position: relative;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        .dialog-box::before, .dialog-box::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border: 10px solid rgba(128, 128, 128, 0.7);
+            border-radius: 50%;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(128, 128, 128, 0.7);
+        }
+
+        .dialog-box::after {
+            top: auto;
+            bottom: -30px;
+        }
+
+        /* 设置下一页按钮样式 */
+        .next-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 18px;
+            margin-top: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .next-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dialog-box" id="dialog-box">
+        <!-- 对话框内容将通过JavaScript填充 -->
+    </div>
+    <button class="next-button" id="next-button">下一页</button>
+
+    <script>
+        // 对话内容数组
+        const dialogContent = [
+            "你好，骑士，恭喜你突破重围，在众多同岗位大牛中脱颖而出，成功抵达海陵新手村。在这里，你将开启一段奇妙的旅程，了解海陵特质，获取新手装备，匹配共同闯关队友正式开始游戏前，请认真阅读新手指南，将给你闯关升级带来强大助力!",
+            "在这里，你将学习到很多新知识。",
+            "请确保你能按时完成每个模块。",
+            "我们提供了丰富的学习资源。",
+            "有任何问题可以随时联系导师。",
+            "完成培训后，你会收到证书。",
+            "每个模块后有小测验。",
+            "通过测验后，你可以进入下一模块。",
+            "祝你学习愉快。",
+            "谢谢你的参与！"
+        ];
+
+        let currentPage = 0;
+
+        // 获取对话框和按钮元素
+        const dialogBox = document.getElementById('dialog-box');
+        const nextButton = document.getElementById('next-button');
+
+        // 更新对话框内容函数
+        function updateDialog() {
+            const content = dialogContent[currentPage];
+            let index = 0;
+
+            dialogBox.textContent = '';
+            
+            function typeWriter() {
+                if (index < content.length) {
+                    dialogBox.innerHTML += content.charAt(index);
+                    index++;
+                    setTimeout(typeWriter, 50);
+                }
+            }
+
+            typeWriter();
+
+            if (currentPage === dialogContent.length - 1) {
+                nextButton.textContent = '完成';
+                nextButton.disabled = true;
+            }
+        }
+
+        // 下一页按钮点击事件
+        nextButton.addEventListener('click', () => {
+            if (currentPage < dialogContent.length - 1) {
+                currentPage++;
+                updateDialog();
+            }
+        });
+
+        // 初始化对话框内容
+        updateDialog();
+    </script>
+</body>
+
+</html>

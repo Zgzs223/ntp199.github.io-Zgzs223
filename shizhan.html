@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>材料上传页面</title>
+    <style>
+        body {
+            background: url('https://s2.loli.net/2024/06/07/Fiv89C6sX7LAJo2.png') no-repeat center center;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .upload-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .upload-container h2 {
+            margin-bottom: 20px;
+        }
+
+        .upload-container input[type="file"] {
+            margin-bottom: 20px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button-container .home-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .button-container .home-button:hover {
+            background-color: #45a049;
+        }
+
+        .button-container .next-button {
+            background-color: #008CBA;
+            color: white;
+        }
+
+        .button-container .next-button:hover {
+            background-color: #007B9A;
+        }
+
+        .upload-button {
+            background-color: #f0ad4e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .upload-button:hover {
+            background-color: #ec971f;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="upload-container" id="page1">
+        <h2>公司简洁学习成绩上传</h2>
+        <input type="file" id="file1" accept=".pdf,.doc,.docx">
+        <button class="upload-button" onclick="uploadFile(1)">上传</button>
+        <div class="button-container">
+            <button class="home-button" onclick="goHome()">返回主页</button>
+        </div>
+    </div>
+
+    <div class="upload-container hidden" id="page2">
+        <h2>质量文化学习成绩上传</h2>
+        <input type="file" id="file2" accept=".pdf,.doc,.docx">
+        <button class="upload-button" onclick="uploadFile(2)">上传</button>
+        <div class="button-container">
+            <button class="home-button" onclick="goHome()">返回主页</button>
+        </div>
+    </div>
+
+    <div class="upload-container hidden" id="page3">
+        <h2>制度法规学习成绩上传</h2>
+        <input type="file" id="file3" accept=".pdf,.doc,.docx">
+        <button class="upload-button" onclick="uploadFile(3)">上传</button>
+        <div class="button-container">
+            <button class="home-button" onclick="goHome()">返回主页</button>
+            <button class="next-button" onclick="submitAll()">提交</button>
+        </div>
+    </div>
+
+    <script>
+        function goHome() {
+            window.location.href = "index.html"; // 将此更改为主页的实际链接
+        }
+
+        function nextPage(pageNumber) {
+            document.querySelectorAll('.upload-container').forEach(page => {
+                page.classList.add('hidden');
+            });
+            document.getElementById(`page${pageNumber}`).classList.remove('hidden');
+        }
+
+        function uploadFile(pageNumber) {
+            const fileInput = document.getElementById(`file${pageNumber}`);
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('请选择文件后再上传');
+                return;
+            }
+
+            // 模拟文件上传，实际应用中需要实现上传逻辑
+            setTimeout(() => {
+                alert(`文件 ${file.name} 上传成功`);
+                if (pageNumber < 3) {
+                    nextPage(pageNumber + 1);
+                }
+            }, 1000);
+        }
+
+        function submitAll() {
+            alert('所有文件上传成功');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            nextPage(1);
+        });
+    </script>
+</body>
+
+</html>
